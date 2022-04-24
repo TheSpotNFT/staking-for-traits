@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Spot Staking Test</title>
+    <!-- jQuery first -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <!-- Our code second -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+            type="application/javascript"></script>
+    <script src="code.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <h1>Spot Staking</h1>
+        <button id="connectButton">Connect Wallet</button>
+        <p>Wallet Spot Balance: <span id="walletSpotTokens"></span></p>
+        <p>Wallet nft1 Balance: <span id="walletOneTokens"></span></p>
+        <p>Wallet nft2 Balance: <span id="walletTwoTokens"></span></p>
+        <p>Staking Option 1</p>
+        <p>Time until Claimable: <span id="timeOneClaimable"></span></p>
+        <p id="transaction1"></p>
+        <button id="stakeButton1">Stake Option 1</button>
+        <button id="claimButton1">Claim Option 1</button>
+        <p>Staking Option 2</p>
+        <p>Time until Claimable: <span id="timeTwoClaimable"></span></p>
+        <p id="transaction2"></p>
+        <button id="stakeButton2">Stake Option 2</button>
+        <button id="claimButton2">Claim Option 2</button>
+        <br/>
+        <br/>
+        <div id="addItemDiv">
+            <label for="contract">NFT Contract</label>
+            <input id="contract" type="text" value="address"/>
+            <br/>
+            <label for="time">Stake Time</label>
+            <input id="time" type="number" min="1" value="1"/>
+            <br/>
+            <label for="rewardContract">Reward Contract</label>
+            <input id="rewardContract" type="text" value="address"/>
+            <br/>
+            <label for="tokenID">Reward Token ID</label>
+            <input id="tokenID" type="number" min="1" value="1"/>
+            <br/>
+            <button id="addItem">
+                Add Item
+            </button>
+        </div>
+    </div>
+</body>
+</html>
