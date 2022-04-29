@@ -747,15 +747,16 @@ contract SpotStaking is Ownable {
 
     function stake(address _contract, uint _contractIndex) public {
         uint index = contractToIndexes[_contract][_contractIndex];
+	require(userToIndexStakeStart[msg.sender][index] == 0, "Spot Staking: You've already started staking!");
         StakeItem memory s = stakeItems[index];
         require(s.active, "Staking that NFT is not currently available!");
-        require(userToIndexClaimed[msg.sender][index] == 0, "You've already claimed this!");
+        require(userToIndexClaimed[msg.sender][index] == 0, "Spot Staking: You've already claimed this!");
 
         IERC721 spotNFT = IERC721(SPOT_CONTRACT);
-        require(spotNFT.balanceOf(msg.sender) > 0, "You don't have a Spot!");
+        require(spotNFT.balanceOf(msg.sender) > 0, "Spot Staking: You don't have a Spot!");
 
         IERC721 stakedNFT = IERC721(_contract);
-        require(stakedNFT.balanceOf(msg.sender) > 0, "You don't have the correct NFT to stake!");
+        require(stakedNFT.balanceOf(msg.sender) > 0, "Spot Staking: You don't have the correct NFT to stake!");
 
         userToIndexStakeStart[msg.sender][index] = block.timestamp;
         emit StakeStarted(msg.sender, _contract, block.timestamp);
@@ -763,19 +764,19 @@ contract SpotStaking is Ownable {
 
     function claimStake(address _contract, uint _contractIndex) public {
         uint index = contractToIndexes[_contract][_contractIndex];
-        require(userToIndexClaimed[msg.sender][index] == 0, "You've already claimed this!");
+        require(userToIndexClaimed[msg.sender][index] == 0, "Spot Staking: You've already claimed this!");
         
         IERC721 spotNFT = IERC721(SPOT_CONTRACT);
-        require(spotNFT.balanceOf(msg.sender) > 0, "You don't have a Spot!");
+        require(spotNFT.balanceOf(msg.sender) > 0, "Spot Staking: You don't have a Spot!");
         
         IERC721 stakedNFT = IERC721(_contract);
-        require(stakedNFT.balanceOf(msg.sender) > 0, "You don't have the correct NFT in your wallet!");
+        require(stakedNFT.balanceOf(msg.sender) > 0, "Spot Staking: You don't have the correct NFT in your wallet!");
         
-        require(timeUntilClaimable(msg.sender, _contract, _contractIndex) == 0, "Staking not finished yet!");
+        require(timeUntilClaimable(msg.sender, _contract, _contractIndex) == 0, "Spot Staking: Staking not finished yet!");
         
         StakeItem memory s = stakeItems[index];
         IERC1155 rewardContract = IERC1155(s.rewardContract);
-        require(rewardContract.balanceOf(address(this), s.tokenID) > 0, "No rewards available!");
+        require(rewardContract.balanceOf(address(this), s.tokenID) > 0, "Spot Staking: No rewards available!");
 
         rewardContract.safeTransferFrom(address(this), msg.sender, s.tokenID, 1, "");
         userToIndexClaimed[msg.sender][index] = 1;
