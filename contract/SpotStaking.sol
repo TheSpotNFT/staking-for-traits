@@ -736,13 +736,17 @@ contract SpotStaking is Ownable {
         uint index = contractToIndexes[_contract][_contractIndex];
         StakeItem memory s = stakeItems[index];
         uint userStarted = userToIndexStakeStart[_account][index];
-        uint _endTime = userStarted + s.stakeTime;
         
-        if (_endTime > block.timestamp) {
-            return _endTime - block.timestamp;
-        } else {
-            return 0;
-        }
+	if (userStarted == 0) {
+	    return s.stakeTime;
+	} else {
+	    uint _endTime = userStarted + s.stakeTime;
+            if (_endTime > block.timestamp) {
+                return _endTime - block.timestamp;
+            } else {
+                return 0;
+            }
+	}
     }
 
     function stake(address _contract, uint _contractIndex) public {
@@ -765,7 +769,6 @@ contract SpotStaking is Ownable {
     function claimStake(address _contract, uint _contractIndex) public {
         uint index = contractToIndexes[_contract][_contractIndex];
         require(userToIndexClaimed[msg.sender][index] == 0, "Spot Staking: You've already claimed this!");
-	require(userToIndexStakeStart[msg.sender][index] > 0, "Spot Staking: You haven't started staking!");
         
         IERC721 spotNFT = IERC721(SPOT_CONTRACT);
         require(spotNFT.balanceOf(msg.sender) > 0, "Spot Staking: You don't have a Spot!");
